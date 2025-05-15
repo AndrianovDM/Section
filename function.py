@@ -1,6 +1,6 @@
 from iapws import IAPWS97
 from sympy import *
-import win32com.client
+# import win32com.client
 import pythoncom
 import subprocess as sb
 from scipy.optimize import fsolve
@@ -293,92 +293,93 @@ def int_r(num):
     return num
 
 def solid_profiling(array, h, i, method):
-    a = 1000
-    pythoncom.CoInitialize()
-    sb.Popen(r'D:/SOLIDWORKS/SOLIDWORKS/SLDWORKS.exe')
-    sw = win32com.client.Dispatch("SldWorks.Application")
-    sw.newpart
-    VT_BYREF = win32com.client.VARIANT(pythoncom.VT_BYREF | pythoncom.VT_I4, -1)
-    Nothing = win32com.client.VARIANT(9, None)
-    sw.ActivateDoc3(f'Part{i + 1}', True, 0, VT_BYREF)
-    swDoc = sw.ActiveDoc
+    return
+#     a = 1000
+#     pythoncom.CoInitialize()
+#     sb.Popen(r'D:/SOLIDWORKS/SOLIDWORKS/SLDWORKS.exe')
+#     sw = win32com.client.Dispatch("SldWorks.Application")
+#     sw.newpart
+#     VT_BYREF = win32com.client.VARIANT(pythoncom.VT_BYREF | pythoncom.VT_I4, -1)
+#     Nothing = win32com.client.VARIANT(9, None)
+#     sw.ActivateDoc3(f'Part{i + 1}', True, 0, VT_BYREF)
+#     swDoc = sw.ActiveDoc
 
-    plane = []
-    for j in range(len(h)):
-        boolstatus = swDoc.Extension.SelectByID2("Сверху", "PLANE", 0, 0, 0, True, 0, Nothing, 0)
-        myRefPlane = swDoc.FeatureManager.InsertRefPlane(8, h[j] /(2 * a), 0, 0, 0, 0)
-        plane.append(myRefPlane)
+#     plane = []
+#     for j in range(len(h)):
+#         boolstatus = swDoc.Extension.SelectByID2("Сверху", "PLANE", 0, 0, 0, True, 0, Nothing, 0)
+#         myRefPlane = swDoc.FeatureManager.InsertRefPlane(8, h[j] /(2 * a), 0, 0, 0, 0)
+#         plane.append(myRefPlane)
 
-    for j in range(len(h)):
+#     for j in range(len(h)):
        
-        plane[j].Select2(False, -1)
-        swDoc.SketchManager.InsertSketch(True)
-        swDoc.ClearSelection2(True)
-        sketch = swDoc.SketchManager.ActiveSketch  
+#         plane[j].Select2(False, -1)
+#         swDoc.SketchManager.InsertSketch(True)
+#         swDoc.ClearSelection2(True)
+#         sketch = swDoc.SketchManager.ActiveSketch  
 
-        if method == 'profile rab':
-            points = []
-            for k in range(len(array[j]["rab_profil"].x)):
-                points.append(array[j]["rab_profil"].x[k] / a)
-                points.append(array[j]["rab_profil"].y[k] / a)
-                points.append([0 for i in range(len(array[j]["rab_profil"].y))][k] / a)
+#         if method == 'profile rab':
+#             points = []
+#             for k in range(len(array[j]["rab_profil"].x)):
+#                 points.append(array[j]["rab_profil"].x[k] / a)
+#                 points.append(array[j]["rab_profil"].y[k] / a)
+#                 points.append([0 for i in range(len(array[j]["rab_profil"].y))][k] / a)
             
-        if method == 'profile sopl':
-            points = []
-            for k in range(len(array[j]["sopl_profil"].x)):
-                points.append(array[j]["sopl_profil"].x[k] / a)
-                points.append(array[j]["sopl_profil"].y[k] / a)
-                points.append([0 for i in range(len(array[j]["sopl_profil"].y))][k] / a)
+#         if method == 'profile sopl':
+#             points = []
+#             for k in range(len(array[j]["sopl_profil"].x)):
+#                 points.append(array[j]["sopl_profil"].x[k] / a)
+#                 points.append(array[j]["sopl_profil"].y[k] / a)
+#                 points.append([0 for i in range(len(array[j]["sopl_profil"].y))][k] / a)
             
-        point_inl = swDoc.SketchManager.CreatePoint(np.round((array[j]["point_O1"].x / a),8), np.round((array[j]["point_O1"].y / a),8), 0)
-        point_out = swDoc.SketchManager.CreatePoint(np.round((array[j]["point_O2"].x / a),8), np.round((array[j]["point_O2"].y / a),8), 0)
+#         point_inl = swDoc.SketchManager.CreatePoint(np.round((array[j]["point_O1"].x / a),8), np.round((array[j]["point_O1"].y / a),8), 0)
+#         point_out = swDoc.SketchManager.CreatePoint(np.round((array[j]["point_O2"].x / a),8), np.round((array[j]["point_O2"].y / a),8), 0)
         
-        status = win32com.client.VARIANT(16396, None)  
-        pointArray = win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, points)
-        skSegment = swDoc.SketchManager.CreateSpline3(pointArray, Nothing, Nothing, True, status)
+#         status = win32com.client.VARIANT(16396, None)  
+#         pointArray = win32com.client.VARIANT(pythoncom.VT_ARRAY | pythoncom.VT_R8, points)
+#         skSegment = swDoc.SketchManager.CreateSpline3(pointArray, Nothing, Nothing, True, status)
         
-        swDoc.SketchManager.InsertSketch(False)
-    if method == 'profile sopl':
-        swDoc.SaveAs3(f'B:\\Postgraduate studies\\ДИСЕРТАЦИЯ АСПИАРНТУРА\\NEW DISERT\\Programm PTUV1\\Сопловая лопатка №{i + 1}.SLDPRT', 0, 1)
-    if method == 'profile rab':
-        swDoc.SaveAs3(f'B:\\Postgraduate studies\\ДИСЕРТАЦИЯ АСПИАРНТУРА\\NEW DISERT\\Programm PTUV1\\Рабочая лопатка №{i + 1}.SLDPRT', 0, 1)
-    # pythoncom.CoUninitialize()
-    # sw.ExitApp()
+#         swDoc.SketchManager.InsertSketch(False)
+#     if method == 'profile sopl':
+#         swDoc.SaveAs3(f'B:\\Postgraduate studies\\ДИСЕРТАЦИЯ АСПИАРНТУРА\\NEW DISERT\\Programm PTUV1\\Сопловая лопатка №{i + 1}.SLDPRT', 0, 1)
+#     if method == 'profile rab':
+#         swDoc.SaveAs3(f'B:\\Postgraduate studies\\ДИСЕРТАЦИЯ АСПИАРНТУРА\\NEW DISERT\\Programm PTUV1\\Рабочая лопатка №{i + 1}.SLDPRT', 0, 1)
+#     # pythoncom.CoUninitialize()
+#     # sw.ExitApp()
 
-def writeExcel(array1, array2, method):
-    if method == 'sopl':
-        df_list_sopl = []
-        for i in range(len(array1)):
-            df_list_sopl.append(pd.DataFrame(array1[i], columns = ['X', 'Y']))
-        buffer = io.BytesIO()
+# def writeExcel(array1, array2, method):
+#     if method == 'sopl':
+#         df_list_sopl = []
+#         for i in range(len(array1)):
+#             df_list_sopl.append(pd.DataFrame(array1[i], columns = ['X', 'Y']))
+#         buffer = io.BytesIO()
 
-        with pd.ExcelWriter(buffer, engine ='xlsxwriter') as writer:
-            for i in range(len(df_list_sopl)):
-                df_list_sopl[i].to_excel(writer, sheet_name = f'Sheet{i}')
-            writer.close()
+#         with pd.ExcelWriter(buffer, engine ='xlsxwriter') as writer:
+#             for i in range(len(df_list_sopl)):
+#                 df_list_sopl[i].to_excel(writer, sheet_name = f'Sheet{i}')
+#             writer.close()
 
-            st.download_button(
-            label = "Сохранить координаты сопловой решетки",
-            data = buffer,
-            file_name ="координаты профилей сопловой решетки.xlsx",
-            mime = "application/vnd.ms-excel")
+#             st.download_button(
+#             label = "Сохранить координаты сопловой решетки",
+#             data = buffer,
+#             file_name ="координаты профилей сопловой решетки.xlsx",
+#             mime = "application/vnd.ms-excel")
 
-    if method == 'rab':
-        df_list_rab = []
-        for i in range(len(array1)):
-            df_list_rab.append(pd.DataFrame(array2[i], columns = ['X', 'Y']))
-        buffer = io.BytesIO()
+#     if method == 'rab':
+#         df_list_rab = []
+#         for i in range(len(array1)):
+#             df_list_rab.append(pd.DataFrame(array2[i], columns = ['X', 'Y']))
+#         buffer = io.BytesIO()
 
-        with pd.ExcelWriter(buffer, engine ='xlsxwriter') as writer:
-            for i in range(len(df_list_rab)):
-                df_list_rab[i].to_excel(writer, sheet_name = f'Sheet{i}')
-            writer.close()
+#         with pd.ExcelWriter(buffer, engine ='xlsxwriter') as writer:
+#             for i in range(len(df_list_rab)):
+#                 df_list_rab[i].to_excel(writer, sheet_name = f'Sheet{i}')
+#             writer.close()
 
-            st.download_button(
-            label = "Сохранить координаты рабочей решетки",
-            data = buffer,
-            file_name ="координаты профилей рабочей решетки.xlsx",
-            mime = "application/vnd.ms-excel")
+#             st.download_button(
+#             label = "Сохранить координаты рабочей решетки",
+#             data = buffer,
+#             file_name ="координаты профилей рабочей решетки.xlsx",
+#             mime = "application/vnd.ms-excel")
 
 # def solid(array, i, method):
 #     a = 1000
