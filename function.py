@@ -1,7 +1,7 @@
 from iapws import IAPWS97
 from sympy import *
 # import win32com.client
-import pythoncom
+# import pythoncom
 import subprocess as sb
 from scipy.optimize import fsolve
 from scipy import optimize as scop
