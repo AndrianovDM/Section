@@ -8,7 +8,7 @@ from profilingPlot import *
 from profilingTable import *
 from stageTable import *
 
-st.set_option('deprecation.showPyplotGlobalUse', False)
+# st.set_option('deprecation.showPyplotGlobalUse', False)
 def spin_laws_stage(P_0_, t_0_, H_0_, L_u, alpha0, alpha1, alpha2, C1, C2, U1, U2, h_sopl, B_sopl, Dsr_sopl, h_rab, B_rab, Dsr_rab, sect, method):  
 
     radius_sopl_i = [(h_sopl / (sect - 1)) * i + (Dsr_sopl - h_sopl) / 2 for i in range(sect)]
