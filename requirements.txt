@@ -1,0 +1,7 @@
+scipy
+matplotlib
+sympy
+iapws
+openpyxl
+plotly
+#pypiwin32==306
