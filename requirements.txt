@@ -4,4 +4,4 @@ sympy
 iapws
 openpyxl
 plotly
-#pypiwin32==306
+pypiwin32==306
